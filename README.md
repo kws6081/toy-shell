@@ -38,7 +38,7 @@ exit
 (2)Commands made by compiling info.c, red.c, undocolor.c,  
 (3)Commands defined in shell.c.  
 
-2. Every commands in /bin which require less than 4 arguments are available.  
+2. Every commands in /bin which require 3 arguments or less are available.  
 ```
 mkdir a  
 ls  

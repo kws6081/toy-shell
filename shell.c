@@ -39,7 +39,7 @@ int main(void)
             printf("Hello.\nFor more information, enter <info>\n");
         }
 
-        char *username = getpwuid(getuid())->pw_name;
+        char *username = getpwuid(getuid())->pw_name; // get user name and host name
         char hostname[LEN_HOSTNAME + 1];
         memset(hostname, 0x00, sizeof(hostname));
         gethostname(hostname, LEN_HOSTNAME);
@@ -125,19 +125,19 @@ int main(void)
             exit(1);
         } 
         if (pid != 0) {  /* parent */
-            cpid = waitpid(pid, &status, 0);//parent wait
+            cpid = waitpid(pid, &status, 0);
             if (cpid != pid) {
                 fprintf(stderr, "waitpid failed\n");        
             }
             printf("Child process terminated\n");
-            if (WIFEXITED(status)) { // child가 종료되면 true
+            if (WIFEXITED(status)) {
                 printf("Exit status is %d\n", WEXITSTATUS(status)); 
             }
         }
         else {  /* child */
             printf("[%s] command executed\n", command);
 
-            ret = execve(args[0], args, NULL); // child 실행, 실패는 -1 
+            ret = execve(args[0], args, NULL);
             if (ret < 0) {
                 fprintf(stderr, "execve failed\n");   
                 return 1;
@@ -146,4 +146,4 @@ int main(void)
         lines++;
     }
     return 0;
-}
+} 

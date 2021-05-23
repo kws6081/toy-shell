@@ -17,7 +17,7 @@ int main(void)
     char *idx1;
     char *idx2;
     char *idx3;
-    char *args[] = {command, idx1, idx2, idx3, NULL};
+    char *args[] = {command, idx1, idx2, idx3, NULL}; // 1 command + 3 arguments
     int ret, status;
     pid_t pid, cpid;
 
@@ -45,28 +45,28 @@ int main(void)
         gethostname(hostname, LEN_HOSTNAME);
         getcwd(workingDir, sizeof(workingDir));
 
-        int slashCount = 0;
+        int slashCount = 0; // count slashes in directory to make an array(char *dir[slashCount])
         for(int i = 0; i < sizeof(workingDir); i++){
             if(workingDir[i] == '/') slashCount++;
         }
 
         char *dir[slashCount];
 
-        dirToken = strtok(workingDir,"/");
+        dirToken = strtok(workingDir,"/");   // parse directory by "/" 
         int count = 0;
         while(dirToken!=NULL){
             dir[count] = dirToken;      
             dirToken = strtok(NULL,"/");
             count++;
         }
-        if((strcmp(dir[0], "home") == 0) && (strcmp(dir[1], username) == 0)) {
+        if((strcmp(dir[0], "home") == 0) && (strcmp(dir[1], username) == 0)) { // /home/username -> ~/
             strcpy(workingDir, home);
             for(int i = 2; i<slashCount; i++){
                 strcat(workingDir, slash);
                 strcat(workingDir, dir[i]);
             }
         }
-        else if((strcmp(dir[0], "home") == 0) && (strcmp(dir[1], username) != 0)) {
+        else if((strcmp(dir[0], "home") == 0) && (strcmp(dir[1], username) != 0)) { // directory : /home
             strcpy(workingDir, slash);
             strcat(workingDir, home);
             for(int i = 1; i<slashCount; i++){
@@ -75,7 +75,7 @@ int main(void)
             }
         }
         else {
-            for(int i = 0; i<slashCount; i++){
+            for(int i = 0; i<slashCount; i++){ // root directory -> /
                 strcat(workingDir, slash);
                 strcat(workingDir, dir[i]);
             }
@@ -97,11 +97,10 @@ int main(void)
         
 
         int i = 0;
-        parsed = strtok(command," ");
+        parsed = strtok(command," ");   // parse commands by space bar 
         while(parsed != NULL)
         {
             args[i] = parsed;
-            //printf("args[%d] = %s\n", i, args[i]);
             parsed = strtok(NULL, " ");
             i++;
         }
@@ -109,15 +108,15 @@ int main(void)
         args[i]=NULL;
 
         if((strcmp(command, "red") != 0) && (strcmp(command, "undocolor") != 0) && (strcmp(command, "info") != 0))
-        {
+        {   // make mkdir -> /bin/mkdir
             strcpy(fullPath, path);
             strcat(fullPath, args[0]);
             args[0] = fullPath;
         }
 
         //printf("[%s]\n", command);
-        if(strcmp(command, "clear") == 0) system("clear");  
-        if(strcmp(command, "exit") == 0) break;
+        if(strcmp(command, "clear") == 0) system("clear");  // clear command
+        if(strcmp(command, "exit") == 0) break; // exit command
 
         pid = fork();
         if (pid < 0) {
